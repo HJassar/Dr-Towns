@@ -1,11 +1,10 @@
 import React from 'react'
 
-import walkingRight from './assets/images/walking_right.svg'
-import walkingLeft from './assets/images/walking_left.svg'
-import neutral from './assets/images/neutral.svg'
+import walkingRight from './assets/images/walkingRight.svg';
+import walkingLeft from './assets/images/walkingLeft.svg';
+import neutral from './assets/images/neutral.svg';
 
 import './DrTowns.css'
-
 
 export default function DrTowns() {
 
@@ -18,11 +17,6 @@ export default function DrTowns() {
 
     React.useEffect(() => {
 
-    }, [])
-
-
-    React.useEffect(() => {
-
         const up = ['ArrowUp', 'w',]
         const right = ['ArrowRight', 'd',]
         const down = ['ArrowDown', 's',]
@@ -30,51 +24,19 @@ export default function DrTowns() {
 
         const handleKeyDown = (e) => {
             if ([...up, ...right, ...down, ...left].includes(e.key)) {
-                if (up.includes(e.key)) {
-                    setY(prevY => prevY - 1);
-                    setPressedKeys(prevPressedKeys => ({
-                        ...prevPressedKeys, up: true,
-                        // down: false
-                    }));
-                }
-                if (right.includes(e.key)) {
-                    setX(prevX => prevX + 1);
-                    setPressedKeys(prevPressedKeys => ({
-                        ...prevPressedKeys, right: true,
-                        // left: false
-                    }));
-                }
-                if (down.includes(e.key)) {
-                    setY(prevY => prevY + 1);
-                    setPressedKeys(prevPressedKeys => ({
-                        ...prevPressedKeys, down: true,
-                        // up: false
-                    }));
-                }
-                if (left.includes(e.key)) {
-                    setX(prevX => prevX - 1);
-                    setPressedKeys(prevPressedKeys => ({
-                        ...prevPressedKeys, left: true,
-                        // right: false 
-                    }));
-                }
+                if (up.includes(e.key)) { setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, up: true, down: false, })); }
+                if (right.includes(e.key)) { setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, right: true, left: false, })); }
+                if (down.includes(e.key)) { setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, down: true, up: false, })); }
+                if (left.includes(e.key)) { setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, left: true, right: false, })); }
             }
         }
 
         const handleKeyUp = (e) => {
             if ([...up, ...right, ...down, ...left].includes(e.key)) {
-                if (up.includes(e.key)) {
-                    setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, up: false }));
-                }
-                if (right.includes(e.key)) {
-                    setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, right: false }));
-                }
-                if (down.includes(e.key)) {
-                    setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, down: false }));
-                }
-                if (left.includes(e.key)) {
-                    setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, left: false }));
-                }
+                if (up.includes(e.key)) { setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, up: false })); }
+                if (right.includes(e.key)) { setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, right: false })); }
+                if (down.includes(e.key)) { setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, down: false })); }
+                if (left.includes(e.key)) { setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, left: false })); }
             }
         }
 
@@ -86,13 +48,17 @@ export default function DrTowns() {
             document.removeEventListener('keyup', e => handleKeyUp(e));
         };
 
-
     }, []);
 
-
     React.useEffect(() => {
-        if (Object.values(pressedKeys).some(v => v)) {
+        if (Object.values(pressedKeys).some(v => !!v)) {
             setWalking(() => true);
+
+            if (pressedKeys.right) setX(prevX => prevX + 1);
+            if (pressedKeys.left) setX(prevX => prevX - 1);
+            if (pressedKeys.up) setY(prevY => prevY - 1);
+            if (pressedKeys.down) setY(prevY => prevY + 1);
+
             setRotation(() => {
                 if (pressedKeys.up && pressedKeys.right) return '45';
                 if (pressedKeys.up && pressedKeys.left) return '-45';
