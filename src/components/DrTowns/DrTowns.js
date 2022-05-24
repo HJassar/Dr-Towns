@@ -80,11 +80,12 @@ export default function DrTowns() {
             position: "fixed",
             top: "50%",
             left: "50%",
+            zIndex: "1",
         }}>
             {walking ? <div
                 style={{
-                    width: 75,
-                    height: 60,
+                    // width: 75,
+                    // height: 60,
                     transform: `rotate(${rotation}deg)`,
                     '--walking-right': `url(${walkingRight})`,
                     '--walking-left': `url(${walkingLeft})`,
@@ -97,8 +98,8 @@ export default function DrTowns() {
                 :
                 <div
                     style={{
-                        width: 75,
-                        height: 60,
+                        // width: 75,
+                        // height: 60,
                         transform: `rotate(${rotation}deg)`,
                         '--walking-right': `url(${walkingRight})`,
                         '--walking-left': `url(${walkingLeft})`,
@@ -111,6 +112,7 @@ export default function DrTowns() {
             {rotation} <br />
             x:{x},y:{y} <br />
             walking: {walking.toString()} <br />
+            <div className="level"></div>
         </div>
     )
 }

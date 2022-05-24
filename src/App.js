@@ -1,4 +1,5 @@
 import DrTowns from "./components/DrTowns/DrTowns";
+import Map from "./components/Map/Map";
 
 function App() {
   return (
@@ -8,7 +9,7 @@ function App() {
       </header>
 
       <DrTowns />
-
+      <Map />
     </div>
   );
 }
