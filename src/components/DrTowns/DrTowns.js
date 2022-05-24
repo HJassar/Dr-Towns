@@ -18,14 +18,15 @@ export default function DrTowns() {
 
     React.useEffect(() => {
 
-        window.addEventListener('keydown', e => handleKeyDown(e));
-        window.addEventListener('keyup', e => handleKeyUp(e));
+        document.addEventListener('keydown', e => handleKeyDown(e));
+        document.addEventListener('keyup', e => handleKeyUp(e));
 
         return () => {
-            window.removeEventListener('keydown', e => handleKeyDown(e));
-            window.removeEventListener('keyup', e => handleKeyUp(e));
+            // document.removeEventListener('keydown', e => handleKeyDown(e));
+            document.removeEventListener('keyup', e => handleKeyUp(e));
         };
-    });
+    }, []);
+
 
     const handleKeyDown = (e) => {
         if (['ArrowUp', 'w',
@@ -34,12 +35,14 @@ export default function DrTowns() {
             'ArrowDown', 's',].includes(e.key)) {
             setWalking(true)
 
-            if (['ArrowUp', 'w'].includes(e.key)) { setRotation('-90'); setY(y - 1); }
-            if (['ArrowLeft', 'a'].includes(e.key)) setRotation('180');
-            if (['ArrowRight', 'd'].includes(e.key)) setRotation('0');
-            if (['ArrowDown', 's'].includes(e.key)) setRotation('90');
+            if (['ArrowUp', 'w'].includes(e.key)) { setRotation('-90'); setY(prevY => prevY - 1); }
+            if (['ArrowLeft', 'a'].includes(e.key)) { setRotation('180'); setX(prevX => prevX - 1); }
+            if (['ArrowRight', 'd'].includes(e.key)) { setRotation('0'); setX(prevX => prevX + 1); }
+            if (['ArrowDown', 's'].includes(e.key)) { setRotation('90'); setY(prevY => prevY + 1); }
         }
     }
+
+
 
     const handleKeyUp = (e) => {
         setWalking(false)
