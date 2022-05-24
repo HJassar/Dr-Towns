@@ -14,6 +14,13 @@ export default function DrTowns() {
     const [x, setX] = React.useState(0);
     const [y, setY] = React.useState(0);
 
+    const [pressedKeys, setPressedKeys] = React.useState({});
+
+    React.useEffect(() => {
+
+    }, [])
+
+
     React.useEffect(() => {
 
         const up = ['ArrowUp', 'w',]
@@ -23,16 +30,52 @@ export default function DrTowns() {
 
         const handleKeyDown = (e) => {
             if ([...up, ...right, ...down, ...left].includes(e.key)) {
-                setWalking(true);
-                if (up.includes(e.key)) { setRotation('-90'); setY(prevY => prevY - 1); }
-                if (right.includes(e.key)) { setRotation('0'); setX(prevX => prevX + 1); }
-                if (down.includes(e.key)) { setRotation('90'); setY(prevY => prevY + 1); }
-                if (left.includes(e.key)) { setRotation('180'); setX(prevX => prevX - 1); }
+                if (up.includes(e.key)) {
+                    setY(prevY => prevY - 1);
+                    setPressedKeys(prevPressedKeys => ({
+                        ...prevPressedKeys, up: true,
+                        // down: false
+                    }));
+                }
+                if (right.includes(e.key)) {
+                    setX(prevX => prevX + 1);
+                    setPressedKeys(prevPressedKeys => ({
+                        ...prevPressedKeys, right: true,
+                        // left: false
+                    }));
+                }
+                if (down.includes(e.key)) {
+                    setY(prevY => prevY + 1);
+                    setPressedKeys(prevPressedKeys => ({
+                        ...prevPressedKeys, down: true,
+                        // up: false
+                    }));
+                }
+                if (left.includes(e.key)) {
+                    setX(prevX => prevX - 1);
+                    setPressedKeys(prevPressedKeys => ({
+                        ...prevPressedKeys, left: true,
+                        // right: false 
+                    }));
+                }
             }
         }
 
         const handleKeyUp = (e) => {
-            setWalking(false)
+            if ([...up, ...right, ...down, ...left].includes(e.key)) {
+                if (up.includes(e.key)) {
+                    setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, up: false }));
+                }
+                if (right.includes(e.key)) {
+                    setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, right: false }));
+                }
+                if (down.includes(e.key)) {
+                    setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, down: false }));
+                }
+                if (left.includes(e.key)) {
+                    setPressedKeys(prevPressedKeys => ({ ...prevPressedKeys, left: false }));
+                }
+            }
         }
 
         document.addEventListener('keydown', e => handleKeyDown(e));
@@ -42,7 +85,28 @@ export default function DrTowns() {
             document.removeEventListener('keydown', e => handleKeyDown(e));
             document.removeEventListener('keyup', e => handleKeyUp(e));
         };
+
+
     }, []);
+
+
+    React.useEffect(() => {
+        if (Object.values(pressedKeys).some(v => v)) {
+            setWalking(() => true);
+            setRotation(() => {
+                if (pressedKeys.up && pressedKeys.right) return '45';
+                if (pressedKeys.up && pressedKeys.left) return '-45';
+                if (pressedKeys.down && pressedKeys.right) return '135';
+                if (pressedKeys.down && pressedKeys.left) return '-135';
+                if (pressedKeys.up) return '0';
+                if (pressedKeys.right) return '90';
+                if (pressedKeys.down) return '180';
+                if (pressedKeys.left) return '-90';
+            });
+        } else {
+            setWalking(() => false);
+        }
+    }, [pressedKeys]);
 
     return (
         <div style={{
@@ -79,7 +143,8 @@ export default function DrTowns() {
                 </div>
             }
             {rotation} <br />
-            x:{x},y:{y}
+            x:{x},y:{y} <br />
+            walking: {walking.toString()} <br />
         </div>
     )
 }
