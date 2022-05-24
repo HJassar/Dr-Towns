@@ -1,0 +1,14 @@
+@keyframes walking {
+    0%, 50%, 100% {
+        content: var(--neutral)
+    }
+
+    25% {
+        content: var(--walking-right)
+    }
+
+    75% {
+        content: var(--walking-left)
+    }
+
+}
