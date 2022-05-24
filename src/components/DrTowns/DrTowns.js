@@ -14,39 +14,35 @@ export default function DrTowns() {
     const [x, setX] = React.useState(0);
     const [y, setY] = React.useState(0);
 
-    const speed = 500;
-
     React.useEffect(() => {
+
+        const up = ['ArrowUp', 'w',]
+        const right = ['ArrowRight', 'd',]
+        const down = ['ArrowDown', 's',]
+        const left = ['ArrowLeft', 'a',]
+
+        const handleKeyDown = (e) => {
+            if ([...up, ...right, ...down, ...left].includes(e.key)) {
+                setWalking(true);
+                if (up.includes(e.key)) { setRotation('-90'); setY(prevY => prevY - 1); }
+                if (right.includes(e.key)) { setRotation('0'); setX(prevX => prevX + 1); }
+                if (down.includes(e.key)) { setRotation('90'); setY(prevY => prevY + 1); }
+                if (left.includes(e.key)) { setRotation('180'); setX(prevX => prevX - 1); }
+            }
+        }
+
+        const handleKeyUp = (e) => {
+            setWalking(false)
+        }
 
         document.addEventListener('keydown', e => handleKeyDown(e));
         document.addEventListener('keyup', e => handleKeyUp(e));
 
         return () => {
-            // document.removeEventListener('keydown', e => handleKeyDown(e));
+            document.removeEventListener('keydown', e => handleKeyDown(e));
             document.removeEventListener('keyup', e => handleKeyUp(e));
         };
     }, []);
-
-
-    const handleKeyDown = (e) => {
-        if (['ArrowUp', 'w',
-            'ArrowLeft', 'a',
-            'ArrowRight', 'd',
-            'ArrowDown', 's',].includes(e.key)) {
-            setWalking(true)
-
-            if (['ArrowUp', 'w'].includes(e.key)) { setRotation('-90'); setY(prevY => prevY - 1); }
-            if (['ArrowLeft', 'a'].includes(e.key)) { setRotation('180'); setX(prevX => prevX - 1); }
-            if (['ArrowRight', 'd'].includes(e.key)) { setRotation('0'); setX(prevX => prevX + 1); }
-            if (['ArrowDown', 's'].includes(e.key)) { setRotation('90'); setY(prevY => prevY + 1); }
-        }
-    }
-
-
-
-    const handleKeyUp = (e) => {
-        setWalking(false)
-    }
 
     return (
         <div style={{
@@ -64,7 +60,7 @@ export default function DrTowns() {
                     '--walking-left': `url(${walkingLeft})`,
                     '--neutral': `url(${neutral})`,
                     content: 'var(--neutral)',
-                    animation: `walking ${speed}ms infinite`,
+                    animation: `walking 500ms infinite`,
                 }}
             >
             </div>
